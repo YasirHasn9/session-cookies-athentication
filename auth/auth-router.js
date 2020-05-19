@@ -25,4 +25,20 @@ router.post("/register", async (req, res, next) => {
     next(err);
   }
 });
+
+router.post("/login", async (req, res, next) => {
+  try {
+    const { username, password } = req.body;
+    const user = await Users.findBy({ username })
+    if (user) {
+      res.status(201).json({ message: `Welcome ${user.username}` });
+    } else {
+      res.status(500).json({
+        message: "Invalid credentials"
+      });
+    }
+  } catch (err) {
+    next(err);
+  }
+});
 module.exports = router;

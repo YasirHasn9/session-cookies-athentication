@@ -2,7 +2,9 @@ const db = require("../database/connection");
 
 module.exports = {
   find,
-  add
+  add,
+  findById,
+  findBy
 };
 
 function find() {
@@ -17,6 +19,12 @@ async function add(user) {
     console.log("add db", err);
     throw err;
   }
+}
+
+async function findBy(userData) {
+  return await db("users")
+    .where(userData)
+    .first();
 }
 
 async function findById(id) {
