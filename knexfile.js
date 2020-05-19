@@ -1,44 +1,26 @@
 // Update with your config settings.
 
 module.exports = {
-
   development: {
-    client: 'sqlite3',
+    // here it can be whatever database you wanna work with
+    client: "sqlite3",
+    // this is in case we have a default null value for the keys
+    useNullAsDefault: true,
     connection: {
-      filename: './dev.sqlite3'
-    }
-  },
-
-  staging: {
-    client: 'postgresql',
-    connection: {
-      database: 'my_db',
-      user:     'username',
-      password: 'password'
+      // this is looking for the location of the database started from the root of your folders
+      filename: "./database/auth.db3"
     },
-    pool: {
-      min: 2,
-      max: 10
+    poo: {
+      afterCreate: (conn, done) => {
+        // in case we use a foreign keys
+        conn.run("PRAGMA foreign_keys = ON", done);
+      }
     },
     migrations: {
-      tableName: 'knex_migrations'
-    }
-  },
-
-  production: {
-    client: 'postgresql',
-    connection: {
-      database: 'my_db',
-      user:     'username',
-      password: 'password'
+      directory: "./database/migrations"
     },
-    pool: {
-      min: 2,
-      max: 10
-    },
-    migrations: {
-      tableName: 'knex_migrations'
+    seeds: {
+      directory: "./database/seeds"
     }
   }
-
 };
