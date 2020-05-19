@@ -1,11 +1,8 @@
 const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 const Users = require("../users/usersModels");
-function isValid(user) {
-  return Boolean(
-    user.username && user.password && typeof user.password === "string"
-  );
-}
+const { isValid } = require("../middlewares/isValid");
+
 router.post("/register", async (req, res, next) => {
   try {
     const credentials = req.body;
@@ -32,6 +29,9 @@ router.post("/login", async (req, res, next) => {
     const user = await Users.findBy({ username });
 
     if (user && bcrypt.compareSync(password, user.password)) {
+      // send cookies
+      req.session.user = user;
+      req.session.loggedIn = true;
       res.status(201).json({ message: `Welcome ${user.username}` });
     } else {
       res.status(500).json({
