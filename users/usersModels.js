@@ -7,8 +7,8 @@ module.exports = {
   findBy
 };
 
-function find() {
-  return db("users");
+async function find() {
+  return await db("users");
 }
 
 async function add(user) {
@@ -16,7 +16,6 @@ async function add(user) {
     const [id] = await db("users").insert(user);
     return findById(id);
   } catch (err) {
-    console.log("add db", err);
     throw err;
   }
 }
@@ -28,7 +27,7 @@ async function findBy(userData) {
 }
 
 async function findById(id) {
-  return db("users")
+  return await db("users")
     .where({ id })
     .first();
 }
